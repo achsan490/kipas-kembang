@@ -23,7 +23,8 @@ if (mysqli_num_rows($result) == 0) {
 
 $data = mysqli_fetch_assoc($result);
 $kegiatan = getAllKegiatan($conn);
-$madrasahs = getAllMadrasah($conn);
+// Hanya tampilkan madrasah yang di-assign ke pengawas ini
+$madrasahs = getMadrasahByPengawas($conn, $_SESSION['user_id']);
 ?>
 
 <main class="main-content w-100">
@@ -50,18 +51,6 @@ $madrasahs = getAllMadrasah($conn);
                             <input type="date" class="form-control bg-light border-0" id="tanggal_kegiatan" name="tanggal_kegiatan" value="<?php echo $data['tanggal_kegiatan']; ?>" required>
                         </div>
                         
-                        <div class="mb-3">
-                            <label for="jenis_kegiatan_id" class="form-label fw-bold">Jenis Kegiatan</label>
-                            <select class="form-select bg-light border-0" id="jenis_kegiatan_id" name="jenis_kegiatan_id" required>
-                                <option value="">-- Pilih Kegiatan --</option>
-                                <?php foreach($kegiatan as $k): ?>
-                                    <option value="<?php echo $k['id']; ?>" <?php echo ($k['id'] == $data['jenis_kegiatan_id']) ? 'selected' : ''; ?>>
-                                        <?php echo $k['nama_kegiatan']; ?> (Poin: <?php echo $k['poin_kredit']; ?>)
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-
                         <div class="mb-3">
                             <label for="madrasah_id" class="form-label fw-bold">Lokasi Madrasah Binaan <span class="text-muted fw-normal">(Opsional)</span></label>
                             <select class="form-select bg-light border-0" id="madrasah_id" name="madrasah_id">

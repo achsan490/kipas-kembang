@@ -54,3 +54,47 @@ function getAllKegiatan($conn) {
     }
     return $data;
 }
+
+// Fungsi Ambil Madrasah yang Di-assign ke Pengawas
+function getMadrasahByPengawas($conn, $pengawas_id) {
+    $pengawas_id = intval($pengawas_id);
+    $query = "SELECT m.* 
+              FROM madrasah m
+              INNER JOIN pengawas_madrasah pm ON m.id = pm.madrasah_id
+              WHERE pm.pengawas_id = $pengawas_id AND pm.status = 'aktif'
+              ORDER BY m.nama_madrasah ASC";
+    
+    $result = mysqli_query($conn, $query);
+    $data = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }
+    return $data;
+}
+
+// Fungsi Validasi Akses Pengawas ke Madrasah
+function validateMadrasahAccess($conn, $pengawas_id, $madrasah_id) {
+    $pengawas_id = intval($pengawas_id);
+    $madrasah_id = intval($madrasah_id);
+    
+    $query = "SELECT COUNT(*) as count 
+              FROM pengawas_madrasah 
+              WHERE pengawas_id = $pengawas_id 
+              AND madrasah_id = $madrasah_id 
+              AND status = 'aktif'";
+    
+    $result = mysqli_query($conn, $query);
+    $row = mysqli_fetch_assoc($result);
+    
+    return $row['count'] > 0;
+}
+
+// Fungsi Get All Pengawas
+function getAllPengawas($conn) {
+    $result = mysqli_query($conn, "SELECT id, nip, nama_lengkap FROM users WHERE role = 'pengawas' ORDER BY nama_lengkap ASC");
+    $data = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }
+    return $data;
+}

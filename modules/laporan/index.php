@@ -22,7 +22,7 @@ $query = "SELECT k.*, u.nama_lengkap, u.nip, jk.nama_kegiatan, jk.poin_kredit
           JOIN users u ON k.user_id = u.id
           JOIN jenis_kegiatan jk ON k.jenis_kegiatan_id = jk.id
           $where
-          ORDER BY k.tanggal_kegiatan ASC";
+          ORDER BY k.tanggal_kegiatan DESC, k.created_at DESC";
 
 $result = mysqli_query($conn, $query);
 

@@ -12,9 +12,17 @@ $user_id = $_SESSION['user_id'];
 
 if ($act == 'insert' && $_SERVER['REQUEST_METHOD'] == 'POST') {
     $tanggal = $_POST['tanggal_kegiatan'];
-    $jenis_kegiatan = $_POST['jenis_kegiatan_id'];
+    $jenis_kegiatan = "NULL"; // Set NULL karena field dihapus
     $madrasah = !empty($_POST['madrasah_id']) ? $_POST['madrasah_id'] : "NULL";
     $deskripsi = mysqli_real_escape_string($conn, $_POST['deskripsi']);
+    
+    // VALIDASI: Cek apakah pengawas punya akses ke madrasah yang dipilih
+    if ($madrasah != "NULL") {
+        if (!validateMadrasahAccess($conn, $user_id, intval($madrasah))) {
+            flash('danger', '⛔ Anda tidak memiliki akses ke madrasah ini! Silakan hubungi admin untuk assignment madrasah.');
+            redirect('modules/kinerja/tambah.php');
+        }
+    }
     
     // Upload File Logic
     $file_bukti = "NULL";
@@ -102,9 +110,18 @@ if ($act == 'insert' && $_SERVER['REQUEST_METHOD'] == 'POST') {
 } elseif ($act == 'update' && $_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = $_POST['id'];
     $tanggal = $_POST['tanggal_kegiatan'];
-    $jenis_kegiatan = $_POST['jenis_kegiatan_id'];
+    $jenis_kegiatan = "NULL"; // Set NULL karena field dihapus
     $madrasah = !empty($_POST['madrasah_id']) ? $_POST['madrasah_id'] : "NULL";
     $deskripsi = mysqli_real_escape_string($conn, $_POST['deskripsi']);
+    
+    // VALIDASI: Cek apakah pengawas punya akses ke madrasah yang dipilih
+    if ($madrasah != "NULL") {
+        if (!validateMadrasahAccess($conn, $user_id, intval($madrasah))) {
+            flash('danger', '⛔ Anda tidak memiliki akses ke madrasah ini! Silakan hubungi admin untuk assignment madrasah.');
+            redirect('modules/kinerja/edit.php?id=' . $id);
+        }
+    }
+    
     
     // Cek kepemilikan dan status
     $cek = mysqli_query($conn, "SELECT * FROM kinerja WHERE id = $id AND user_id = $user_id AND status != 'disetujui'");

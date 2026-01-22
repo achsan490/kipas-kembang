@@ -29,12 +29,18 @@ $role = $_SESSION['role'] ?? '';
             <i class="fas fa-th-large"></i> Dashboard
         </a>
 
-        <?php if ($role === 'pengawas' || $role === 'admin'): ?>
+        <?php if ($role === 'pengawas'): ?>
         <a class="nav-link <?php echo isActive('kinerja/index.php'); ?>" href="<?php echo base_url('modules/kinerja/index.php'); ?>">
             <i class="fas fa-clipboard-list"></i> Data Kinerja
         </a>
         <a class="nav-link <?php echo isActive('kinerja/tambah.php'); ?>" href="<?php echo base_url('modules/kinerja/tambah.php'); ?>">
             <i class="fas fa-plus-circle"></i> Input Kinerja
+        </a>
+        <?php endif; ?>
+
+        <?php if ($role === 'pengawas'): ?>
+        <a class="nav-link <?php echo isActive('madrasah/madrasah_saya'); ?>" href="<?php echo base_url('modules/madrasah/madrasah_saya.php'); ?>">
+            <i class="fas fa-school"></i> Madrasah Binaan Saya
         </a>
         <?php endif; ?>
 
@@ -56,6 +62,9 @@ $role = $_SESSION['role'] ?? '';
         </a>
         <a class="nav-link <?php echo isActive('admin/madrasah'); ?>" href="<?php echo base_url('modules/admin/madrasah/index.php'); ?>">
             <i class="fas fa-school"></i> Data Madrasah
+        </a>
+        <a class="nav-link <?php echo isActive('admin/pengawasan'); ?>" href="<?php echo base_url('modules/admin/pengawasan/index.php'); ?>">
+            <i class="fas fa-users-cog"></i> Kelola Pengawasan
         </a>
         <?php endif; ?>
     </div>
