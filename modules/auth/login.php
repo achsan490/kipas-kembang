@@ -14,8 +14,8 @@ if (isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Kinerja Pengawas Jombang</title>
-    <link rel="shortcut icon" href="../../assets/img/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="../../assets/img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../../assets/img/image.jpg" type="image/x-icon">
+    <link rel="icon" href="../../assets/img/image.jpg" type="image/x-icon">
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome -->
@@ -29,7 +29,7 @@ if (isset($_SESSION['user_id'])) {
         <div class="auth-overlay">
             <div class="auth-card">
                 <div class="text-center mb-4">
-                    <img src="../../assets/img/logo-kinerja.jpg" alt="Logo Kinerja Pengawas" width="100" class="mb-3 rounded-circle shadow">
+                    <img src="../../assets/img/image.jpg" alt="Logo Kinerja Pengawas" width="100" class="mb-3 rounded-circle shadow">
                     <h4 class="fw-bold text-dark">Kinerja Pengawas</h4>
                     <p class="text-muted small">Kementerian Agama Kab. Jombang</p>
                 </div>

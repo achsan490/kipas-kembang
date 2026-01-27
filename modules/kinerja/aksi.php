@@ -97,7 +97,7 @@ if ($act == 'insert' && $_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $query = "INSERT INTO kinerja (user_id, tanggal_kegiatan, jenis_kegiatan_id, madrasah_id, deskripsi, file_bukti, foto_timestamp, foto_gps_lat, foto_gps_lng, foto_metadata, status) 
-              VALUES ($user_id, '$tanggal', $jenis_kegiatan, $madrasah, '$deskripsi', $file_bukti, $foto_timestamp, $foto_gps_lat, $foto_gps_lng, $foto_metadata, 'pending')";
+              VALUES ($user_id, '$tanggal', $jenis_kegiatan, $madrasah, '$deskripsi', $file_bukti, $foto_timestamp, $foto_gps_lat, $foto_gps_lng, $foto_metadata, 'disetujui')";
 
     if (mysqli_query($conn, $query)) {
         flash('success', 'Laporan kinerja berhasil disimpan.');
@@ -172,8 +172,8 @@ if ($act == 'insert' && $_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
     
-    // Update query - reset status ke pending jika sebelumnya ditolak
-    $new_status = ($old_data['status'] == 'ditolak') ? 'pending' : $old_data['status'];
+    // Update query - selalu set ke disetujui (auto-approve)
+    $new_status = 'disetujui';
     
     $query = "UPDATE kinerja SET 
               tanggal_kegiatan = '$tanggal',

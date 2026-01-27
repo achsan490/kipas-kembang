@@ -72,24 +72,67 @@ $madrasah_count = mysqli_num_rows($result);
                             </h5>
                         </div>
                         <div class="card-body">
+                            <!-- NSM & NPSN -->
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <small class="text-muted d-block mb-1">
+                                        <i class="fas fa-id-card me-1"></i> NSM
+                                    </small>
+                                    <span class="badge bg-secondary">
+                                        <?php echo htmlspecialchars($m['nsm']); ?>
+                                    </span>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted d-block mb-1">
+                                        <i class="fas fa-id-badge me-1"></i> NPSN
+                                    </small>
+                                    <span class="badge bg-secondary">
+                                        <?php echo htmlspecialchars($m['npsn'] ?? '-'); ?>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Jenjang & Status -->
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <small class="text-muted d-block mb-1">
+                                        <i class="fas fa-graduation-cap me-1"></i> Jenjang
+                                    </small>
+                                    <span class="badge bg-info">
+                                        <?php echo htmlspecialchars($m['jenjang'] ?? '-'); ?>
+                                    </span>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted d-block mb-1">
+                                        <i class="fas fa-tag me-1"></i> Status
+                                    </small>
+                                    <span class="badge <?php echo ($m['status'] == 'negeri') ? 'bg-success' : 'bg-warning'; ?>">
+                                        <?php echo ucfirst($m['status'] ?? '-'); ?>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Kecamatan -->
                             <div class="mb-3">
                                 <small class="text-muted d-block mb-1">
-                                    <i class="fas fa-id-card me-1"></i> NSM
+                                    <i class="fas fa-map-marker-alt me-1"></i> Kecamatan
                                 </small>
-                                <span class="badge bg-secondary">
-                                    <?php echo htmlspecialchars($m['nsm']); ?>
+                                <span class="badge bg-primary">
+                                    <?php echo htmlspecialchars($m['kecamatan'] ?? '-'); ?>
                                 </span>
                             </div>
 
+                            <!-- Alamat -->
                             <div class="mb-3">
                                 <small class="text-muted d-block mb-1">
-                                    <i class="fas fa-map-marker-alt me-1"></i> Alamat
+                                    <i class="fas fa-location-dot me-1"></i> Alamat Lengkap
                                 </small>
                                 <p class="mb-0 small">
                                     <?php echo $m['alamat'] ? htmlspecialchars($m['alamat']) : '-'; ?>
                                 </p>
                             </div>
 
+                            <!-- Kepala Madrasah -->
                             <div class="mb-3">
                                 <small class="text-muted d-block mb-1">
                                     <i class="fas fa-user-tie me-1"></i> Kepala Madrasah

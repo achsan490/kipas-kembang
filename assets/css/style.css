@@ -262,11 +262,11 @@ a {
 .auth-wrapper {
     min-height: 100vh;
     display: flex;
-    background: url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+    background-color: #ffffff;
 }
 
 .auth-overlay {
-    background: rgba(0, 77, 64, 0.9);
+    background: transparent;
     width: 100%;
     display: flex;
     align-items: center;

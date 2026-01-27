@@ -14,7 +14,7 @@ $role = $_SESSION['role'] ?? '';
     <div class="sidebar-brand">
         <div class="d-flex align-items-center gap-2">
             <!-- Logo Kinerja Pengawas Jombang -->
-            <img src="<?php echo base_url('assets/img/logo-kinerja.jpg'); ?>" alt="Logo" width="45" class="rounded-circle">
+            <img src="<?php echo base_url('assets/img/image.jpg'); ?>" alt="Logo" width="45" class="rounded-circle">
             <div class="lh-1">
                 <div class="small fw-normal text-white-50">Kinerja</div>
                 <span class="fw-bold">Pengawas</span>
@@ -42,12 +42,15 @@ $role = $_SESSION['role'] ?? '';
         <a class="nav-link <?php echo isActive('madrasah/madrasah_saya'); ?>" href="<?php echo base_url('modules/madrasah/madrasah_saya.php'); ?>">
             <i class="fas fa-school"></i> Madrasah Binaan Saya
         </a>
+        <a class="nav-link <?php echo isActive('laporan'); ?>" href="<?php echo base_url('modules/laporan/index.php'); ?>">
+            <i class="fas fa-file-alt"></i> Laporan Saya
+        </a>
         <?php endif; ?>
 
         <?php if ($role === 'pimpinan' || $role === 'admin'): ?>
-        <a class="nav-link <?php echo isActive('validasi'); ?>" href="<?php echo base_url('modules/validasi/index.php'); ?>">
-            <i class="fas fa-check-double"></i> Validasi Kinerja
-        </a>
+        <!-- <a class="nav-link <?php echo isActive('pimpinan/pengawas'); ?>" href="<?php echo base_url('modules/pimpinan/pengawas/index.php'); ?>">
+            <i class="fas fa-users-cog"></i> Monitoring Pengawas
+        </a> -->
         <a class="nav-link <?php echo isActive('laporan'); ?>" href="<?php echo base_url('modules/laporan/index.php'); ?>">
             <i class="fas fa-chart-pie"></i> Laporan & Rekap
         </a>
