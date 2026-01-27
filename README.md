@@ -65,13 +65,6 @@ mysql -u root -p kinerja_pengawas < update_unique_constraint.sql
 ### 3. Konfigurasi Database
 Edit file `config/database.php`:
 ```php
-<?php
-return [
-    'host' => 'localhost',
-    'user' => 'root',
-    'pass' => '',
-    'name' => 'kinerja_pengawas'
-];
 ```
 
 ### 4. Setup Web Server
@@ -85,7 +78,7 @@ Username: admin
 Password: admin123
 
 Pengawas:
-Username: pengawas1
+Username: nip
 Password: pengawas123
 
 Pimpinan:
