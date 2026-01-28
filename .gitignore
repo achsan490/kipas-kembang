@@ -1,0 +1,30 @@
+# Ignore uploads folder contents but keep the folder
+uploads/*
+!uploads/.gitkeep
+
+# Ignore config files with sensitive data
+config/database.php
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.sublime-*
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ignore logs
+*.log
+
+# Ignore temporary files
+*.tmp
+*.temp
+*~
+
+# Ignore node modules if any
+node_modules/
+
+# Ignore vendor if using composer
+vendor/
