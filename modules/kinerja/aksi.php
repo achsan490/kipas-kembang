@@ -12,7 +12,7 @@ $user_id = $_SESSION['user_id'];
 
 if ($act == 'insert' && $_SERVER['REQUEST_METHOD'] == 'POST') {
     $tanggal = $_POST['tanggal_kegiatan'];
-    $jenis_kegiatan = "NULL"; // Set NULL karena field dihapus
+    $jenis_kegiatan = "NULL"; // Field removed from form
     $madrasah = !empty($_POST['madrasah_id']) ? $_POST['madrasah_id'] : "NULL";
     $deskripsi = mysqli_real_escape_string($conn, $_POST['deskripsi']);
     
@@ -58,31 +58,77 @@ if ($act == 'insert' && $_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                 // Ekstrak EXIF metadata jika file adalah foto
                 if (in_array($ext, ['jpg', 'jpeg'])) {
-                    $metadata = extractPhotoMetadata($destination);
+                    // Prioritas 1: Gunakan metadata dari client-side (JavaScript EXIF)
+                    $has_client_metadata = false;
                     
-                    if ($metadata && $metadata['has_exif']) {
-                        // Simpan timestamp
-                        if ($metadata['timestamp']) {
-                            $timestamp_formatted = str_replace(':', '-', substr($metadata['timestamp'], 0, 10)) . substr($metadata['timestamp'], 10);
-                            $foto_timestamp = "'" . date('Y-m-d H:i:s', strtotime($timestamp_formatted)) . "'";
+                    if (!empty($_POST['metadata_gps_lat']) && !empty($_POST['metadata_gps_lng'])) {
+                        $foto_gps_lat = floatval($_POST['metadata_gps_lat']);
+                        $foto_gps_lng = floatval($_POST['metadata_gps_lng']);
+                        $has_client_metadata = true;
+                    }
+                    
+                    if (!empty($_POST['metadata_timestamp'])) {
+                        // Format: "2024:01:29 14:30:45"
+                        $timestamp_raw = $_POST['metadata_timestamp'];
+                        $timestamp_formatted = str_replace(':', '-', substr($timestamp_raw, 0, 10)) . substr($timestamp_raw, 10);
+                        $foto_timestamp = "'" . date('Y-m-d H:i:s', strtotime($timestamp_formatted)) . "'";
+                        $has_client_metadata = true;
+                    }
+                    
+                    // Build metadata JSON
+                    $metadata_array = [
+                        'has_exif' => $has_client_metadata,
+                        'timestamp' => $_POST['metadata_timestamp'] ?? null,
+                        'gps_lat' => $_POST['metadata_gps_lat'] ?? null,
+                        'gps_lng' => $_POST['metadata_gps_lng'] ?? null,
+                        'camera' => $_POST['metadata_device'] ?? null,
+                        'source' => 'client-side'
+                    ];
+                    
+                    // Prioritas 2: Fallback ke server-side EXIF jika client-side gagal
+                    if (!$has_client_metadata) {
+                        $server_metadata = extractPhotoMetadata($destination);
+                        
+                        if ($server_metadata && $server_metadata['has_exif']) {
+                            // Simpan timestamp
+                            if ($server_metadata['timestamp']) {
+                                $timestamp_formatted = str_replace(':', '-', substr($server_metadata['timestamp'], 0, 10)) . substr($server_metadata['timestamp'], 10);
+                                $foto_timestamp = "'" . date('Y-m-d H:i:s', strtotime($timestamp_formatted)) . "'";
+                            }
+                            
+                            // Simpan GPS
+                            if ($server_metadata['gps_lat'] && $server_metadata['gps_lng']) {
+                                $foto_gps_lat = $server_metadata['gps_lat'];
+                                $foto_gps_lng = $server_metadata['gps_lng'];
+                            }
+                            
+                            // Update metadata array
+                            $metadata_array = array_merge($metadata_array, [
+                                'has_exif' => true,
+                                'timestamp' => $server_metadata['timestamp'],
+                                'gps_lat' => $server_metadata['gps_lat'],
+                                'gps_lng' => $server_metadata['gps_lng'],
+                                'camera' => $server_metadata['camera'],
+                                'source' => 'server-side'
+                            ]);
+                            
+                            $has_client_metadata = true;
                         }
-                        
-                        // Simpan GPS
-                        if ($metadata['gps_lat'] && $metadata['gps_lng']) {
-                            $foto_gps_lat = $metadata['gps_lat'];
-                            $foto_gps_lng = $metadata['gps_lng'];
-                        }
-                        
-                        // Simpan metadata lengkap sebagai JSON
-                        $foto_metadata = "'" . mysqli_real_escape_string($conn, json_encode($metadata)) . "'";
-                        
-                        // Validasi timestamp (soft warning)
-                        $validation = validatePhotoTimestamp($metadata['timestamp'], $tanggal);
+                    }
+                    
+                    // Simpan metadata lengkap sebagai JSON
+                    $foto_metadata = "'" . mysqli_real_escape_string($conn, json_encode($metadata_array)) . "'";
+                    
+                    // Validasi timestamp (soft warning)
+                    if ($has_client_metadata && !empty($metadata_array['timestamp'])) {
+                        $validation = validatePhotoTimestamp($metadata_array['timestamp'], $tanggal);
                         if (!$validation['valid'] && $validation['level'] == 'danger') {
                             flash('warning', '⚠️ ' . $validation['warning'] . '. Data tetap disimpan untuk verifikasi pimpinan.');
                         }
-                    } else {
-                        // Foto tidak punya EXIF - beri warning
+                    }
+                    
+                    // Warning jika tidak ada metadata
+                    if (!$has_client_metadata) {
                         flash('warning', '⚠️ Foto tidak memiliki informasi waktu/lokasi (EXIF). Disarankan gunakan kamera HP dengan GPS aktif.');
                     }
                 }
@@ -123,8 +169,8 @@ if ($act == 'insert' && $_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     
     
-    // Cek kepemilikan dan status
-    $cek = mysqli_query($conn, "SELECT * FROM kinerja WHERE id = $id AND user_id = $user_id AND status != 'disetujui'");
+    // Cek kepemilikan
+    $cek = mysqli_query($conn, "SELECT * FROM kinerja WHERE id = $id AND user_id = $user_id");
     if (mysqli_num_rows($cek) == 0) {
         flash('danger', 'Data tidak ditemukan atau tidak bisa diedit.');
         redirect('modules/kinerja/index.php');
@@ -195,7 +241,7 @@ if ($act == 'insert' && $_SERVER['REQUEST_METHOD'] == 'POST') {
 } elseif ($act == 'delete') {
     $id = $_GET['id'];
     // Cek kepemilikan
-    $cek = mysqli_query($conn, "SELECT * FROM kinerja WHERE id = $id AND user_id = $user_id AND status != 'disetujui'");
+    $cek = mysqli_query($conn, "SELECT * FROM kinerja WHERE id = $id AND user_id = $user_id");
     if (mysqli_num_rows($cek) > 0) {
         $data = mysqli_fetch_assoc($cek);
         if ($data['file_bukti']) {
@@ -204,7 +250,7 @@ if ($act == 'insert' && $_SERVER['REQUEST_METHOD'] == 'POST') {
         mysqli_query($conn, "DELETE FROM kinerja WHERE id = $id");
         flash('success', 'Data berhasil dihapus.');
     } else {
-        flash('danger', 'Data tidak bisa dihapus (Mungkin sudah disetujui atau bukan milik Anda).');
+        flash('danger', 'Data tidak bisa dihapus (Mungkin bukan milik Anda).');
     }
     redirect('modules/kinerja/index.php');
 } else {

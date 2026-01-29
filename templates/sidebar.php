@@ -34,40 +34,28 @@ $role = $_SESSION['role'] ?? '';
 
         <?php if ($role === 'pengawas'): ?>
         <a class="nav-link <?php echo isActive('kinerja/index.php'); ?>" href="<?php echo base_url('modules/kinerja/index.php'); ?>">
-            <i class="fas fa-clipboard-list"></i> Data Kinerja
+            <i class="fas fa-clipboard-list"></i> Kinerja Pengawas
         </a>
         <a class="nav-link <?php echo isActive('kinerja/tambah.php'); ?>" href="<?php echo base_url('modules/kinerja/tambah.php'); ?>">
             <i class="fas fa-plus-circle"></i> Input Kinerja
+        </a>
+        <a class="nav-link <?php echo isActive('madrasah/madrasah_saya'); ?>" href="<?php echo base_url('modules/madrasah/madrasah_saya.php'); ?>">
+            <i class="fas fa-school"></i> Madrasah Binaan Saya
         </a>
         <?php endif; ?>
 
         <?php if ($role === 'pendamping'): ?>
         <a class="nav-link <?php echo isActive('kinerja/index.php'); ?>" href="<?php echo base_url('modules/kinerja/index.php'); ?>">
-            <i class="fas fa-clipboard-list"></i> Data Kinerja
+            <i class="fas fa-clipboard-list"></i> Kinerja Pengawas
         </a>
         <a class="nav-link <?php echo isActive('kinerja/tambah.php'); ?>" href="<?php echo base_url('modules/kinerja/tambah.php'); ?>">
             <i class="fas fa-plus-circle"></i> Input Kinerja
         </a>
-        <a class="nav-link <?php echo isActive('laporan'); ?>" href="<?php echo base_url('modules/laporan/index.php'); ?>">
-            <i class="fas fa-file-alt"></i> Laporan Saya
-        </a>
-        <?php endif; ?>
-
-        <?php if ($role === 'pengawas'): ?>
-        <a class="nav-link <?php echo isActive('madrasah/madrasah_saya'); ?>" href="<?php echo base_url('modules/madrasah/madrasah_saya.php'); ?>">
-            <i class="fas fa-school"></i> Madrasah Binaan Saya
-        </a>
-        <a class="nav-link <?php echo isActive('laporan'); ?>" href="<?php echo base_url('modules/laporan/index.php'); ?>">
-            <i class="fas fa-file-alt"></i> Laporan Saya
-        </a>
         <?php endif; ?>
 
         <?php if ($role === 'pimpinan' || $role === 'admin'): ?>
-        <!-- <a class="nav-link <?php echo isActive('pimpinan/pengawas'); ?>" href="<?php echo base_url('modules/pimpinan/pengawas/index.php'); ?>">
-            <i class="fas fa-users-cog"></i> Monitoring Pengawas
-        </a> -->
-        <a class="nav-link <?php echo isActive('laporan'); ?>" href="<?php echo base_url('modules/laporan/index.php'); ?>">
-            <i class="fas fa-chart-pie"></i> Laporan & Rekap
+        <a class="nav-link <?php echo isActive('kinerja'); ?>" href="<?php echo base_url('modules/kinerja/index.php'); ?>">
+            <i class="fas fa-chart-pie"></i> Laporan & Rekap Kinerja
         </a>
         <?php endif; ?>
 

@@ -514,11 +514,6 @@ function getLaporanWithFilter($conn, $filters = []) {
     if (!empty($filters['kecamatan'])) {
         $where[] = "m.kecamatan = '" . mysqli_real_escape_string($conn, $filters['kecamatan']) . "'";
     }
-    
-    // Filter status
-    if (!empty($filters['status'])) {
-        $where[] = "k.status = '" . mysqli_real_escape_string($conn, $filters['status']) . "'";
-    }
 
     // Filter Nama/NIP Pengawas (Search)
     if (!empty($filters['search_pengawas'])) {
@@ -535,21 +530,16 @@ function getLaporanWithFilter($conn, $filters = []) {
                 k.tanggal_kegiatan,
                 k.deskripsi,
                 k.file_bukti,
-                k.status,
-                k.catatan_validasi,
                 k.created_at,
                 u.nip,
                 u.nama_lengkap as pengawas_nama,
                 m.nsm,
                 m.nama_madrasah,
                 m.jenjang,
-                m.kecamatan,
-                jk.nama_kegiatan,
-                jk.poin_kredit
+                m.kecamatan
               FROM kinerja k
               INNER JOIN users u ON k.user_id = u.id
               LEFT JOIN madrasah m ON k.madrasah_id = m.id
-              INNER JOIN jenis_kegiatan jk ON k.jenis_kegiatan_id = jk.id
               $where_clause
               ORDER BY k.tanggal_kegiatan DESC, k.created_at DESC";
     
@@ -557,20 +547,15 @@ function getLaporanWithFilter($conn, $filters = []) {
     $data = [];
     
     $total_kinerja = 0;
-    $total_poin = 0;
     
     while ($row = mysqli_fetch_assoc($result)) {
         $data[] = $row;
         $total_kinerja++;
-        if ($row['status'] == 'disetujui') {
-            $total_poin += $row['poin_kredit'];
-        }
     }
     
     return [
         'data' => $data,
         'total_kinerja' => $total_kinerja,
-        'total_poin' => $total_poin,
         'filters' => $filters
     ];
 }
