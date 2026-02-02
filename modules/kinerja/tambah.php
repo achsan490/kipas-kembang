@@ -71,7 +71,7 @@ $madrasahs = getMadrasahByPengawas($conn, $_SESSION['user_id']);
                         
                         <div class="mb-3">
                             <label for="madrasah_id" class="form-label fw-bold">Lokasi Madrasah Binaan <span class="text-muted fw-normal">(Opsional)</span></label>
-                            <select class="form-select bg-light border-0" id="madrasah_id" name="madrasah_id">
+                            <select class="form-select bg-light border-0" id="madrasah_id" name="madrasah_id" style="width: 100%;">
                                 <option value="">-- Pilih Madrasah --</option>
                                 <?php foreach($madrasahs as $m): ?>
                                     <option value="<?php echo $m['id']; ?>"><?php echo $m['nama_madrasah']; ?></option>
@@ -701,6 +701,36 @@ function requestGPSPermission() {
         );
     }
 }
+</script>
+
+<!-- Include jQuery (required for Select2) -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- Include Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+
+<!-- Include Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+// Initialize Select2 for madrasah dropdown
+$(document).ready(function() {
+    $('#madrasah_id').select2({
+        theme: 'bootstrap-5',
+        placeholder: '-- Pilih Madrasah --',
+        allowClear: true,
+        width: '100%',
+        language: {
+            noResults: function() {
+                return "Madrasah tidak ditemukan";
+            },
+            searching: function() {
+                return "Mencari...";
+            }
+        }
+    });
+});
 </script>
 
 

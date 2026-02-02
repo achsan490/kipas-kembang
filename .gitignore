@@ -28,3 +28,6 @@ node_modules/
 
 # Ignore vendor if using composer
 vendor/
+
+# Ignore SQL dumps
+*.sql

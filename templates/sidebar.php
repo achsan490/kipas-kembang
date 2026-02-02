@@ -96,7 +96,14 @@ $role = $_SESSION['role'] ?? '';
                     </div>
                 </div>
                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg mt-3 p-2 rounded-3">
-                    <li><a class="dropdown-item rounded-2" href="#"><i class="fas fa-user-circle me-2 text-primary"></i> Profil Saya</a></li>
+                    <li>
+                        <a class="dropdown-item rounded-2" href="#">
+                            <i class="fas fa-user-circle me-2 text-primary"></i> Profil Saya
+                            <?php if (isset($user['nip']) && $user['nip']): ?>
+                            <div class="small text-muted mt-1 ms-4">NIP: <?php echo $user['nip']; ?></div>
+                            <?php endif; ?>
+                        </a>
+                    </li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item rounded-2 text-danger" href="<?php echo base_url('modules/auth/logout.php'); ?>"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
                 </ul>

@@ -161,7 +161,7 @@ $stats = getMadrasahStats($conn);
                                     </span>
                                 </td>
                                 <td data-label="Kecamatan" class="text-muted"><?php echo $row['kecamatan'] ?? '-'; ?></td>
-                                <td data-label="Alamat" class="text-muted small"><?php echo substr($row['alamat'], 0, 50) . '...'; ?></td>
+                                <td data-label="Alamat" class="text-muted small"><?php echo $row['alamat'] ? (strlen($row['alamat']) > 50 ? substr($row['alamat'], 0, 50) . '...' : $row['alamat']) : '-'; ?></td>
                                 <td data-label="Aksi" class="pe-4 text-end">
                                     <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning rounded-circle me-1" title="Edit">
                                         <i class="fas fa-edit"></i>

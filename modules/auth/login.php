@@ -51,7 +51,7 @@ if (isset($_SESSION['user_id'])) {
                 </form>
                 
                 <div class="mt-4 text-center">
-                    <small class="text-muted">&copy; 2026 San Project</small>
+                    <small class="text-muted">&copy; 2026 Kementerian Agama Kab. Jombang</small>
                 </div>
             </div>
         </div>

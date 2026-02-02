@@ -45,7 +45,11 @@ $madrasah_result = mysqli_query($conn, $madrasah_query);
                                 <i class="fas fa-user-tie me-2 text-primary"></i>
                                 Pilih Pengawas
                             </label>
-                            <select class="form-select bg-light border-0" id="pengawas_id" name="pengawas_id" required>
+                            <select class="form-select bg-light border-0" 
+                                    id="pengawas_id" 
+                                    name="pengawas_id" 
+                                    required
+                                    style="width: 100%;">
                                 <option value="">-- Pilih Pengawas --</option>
                                 <?php while ($p = mysqli_fetch_assoc($pengawas_result)): ?>
                                     <option value="<?php echo $p['id']; ?>">
@@ -56,7 +60,7 @@ $madrasah_result = mysqli_query($conn, $madrasah_query);
                             </select>
                             <div class="form-text">
                                 <i class="fas fa-info-circle me-1"></i>
-                                Pilih pengawas yang akan ditugaskan
+                                Pilih pengawas yang akan ditugaskan. Gunakan pencarian untuk menemukan pengawas dengan cepat.
                             </div>
                         </div>
 
@@ -167,6 +171,23 @@ $madrasah_result = mysqli_query($conn, $madrasah_query);
 <script>
 // Initialize Select2 untuk dropdown madrasah
 $(document).ready(function() {
+    // Initialize Select2 for pengawas dropdown
+    $('#pengawas_id').select2({
+        theme: 'bootstrap-5',
+        placeholder: '-- Pilih Pengawas --',
+        allowClear: true,
+        width: '100%',
+        language: {
+            noResults: function() {
+                return "Pengawas tidak ditemukan";
+            },
+            searching: function() {
+                return "Mencari...";
+            }
+        }
+    });
+    
+    // Initialize Select2 for madrasah dropdown
     $('#madrasah_ids').select2({
         theme: 'bootstrap-5',
         placeholder: 'Pilih madrasah (bisa lebih dari satu)',

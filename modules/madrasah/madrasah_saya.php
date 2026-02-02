@@ -167,20 +167,12 @@ $madrasah_count = mysqli_num_rows($result);
                             <hr>
 
                             <div class="row text-center">
-                                <div class="col-6">
+                                <div class="col-12">
                                     <div class="p-2 bg-light rounded">
                                         <h4 class="mb-0 fw-bold text-primary">
                                             <?php echo $m['total_kinerja']; ?>
                                         </h4>
-                                        <small class="text-muted">Laporan</small>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="p-2 bg-light rounded">
-                                        <h4 class="mb-0 fw-bold text-success">
-                                            <?php echo number_format($m['total_poin'], 1); ?>
-                                        </h4>
-                                        <small class="text-muted">Poin</small>
+                                        <small class="text-muted">Total Laporan Kinerja</small>
                                     </div>
                                 </div>
                             </div>

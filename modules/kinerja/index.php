@@ -147,7 +147,7 @@ if ($filters['tanggal_mulai'] && $filters['tanggal_selesai']) {
                 <?php if ($role === 'pimpinan' || $role === 'admin'): ?>
                 <div class="col-md-3">
                     <label class="form-label fw-bold">Pengawas</label>
-                    <select name="pengawas_id" class="form-select">
+                    <select name="pengawas_id" id="filter_pengawas" class="form-select" style="width: 100%;">
                         <option value="">-- Semua Pengawas --</option>
                         <?php foreach ($pengawasList as $p): ?>
                         <option value="<?php echo $p['id']; ?>" <?php echo ($filters['pengawas_id'] == $p['id']) ? 'selected' : ''; ?>>
@@ -161,7 +161,7 @@ if ($filters['tanggal_mulai'] && $filters['tanggal_selesai']) {
                 <!-- Madrasah -->
                 <div class="col-md-3">
                     <label class="form-label fw-bold">Madrasah</label>
-                    <select name="madrasah_id" class="form-select">
+                    <select name="madrasah_id" id="filter_madrasah" class="form-select" style="width: 100%;">
                         <option value="">-- Semua Madrasah --</option>
                         <?php foreach ($madrasahList as $m): ?>
                         <option value="<?php echo $m['id']; ?>" <?php echo ($filters['madrasah_id'] == $m['id']) ? 'selected' : ''; ?>>
@@ -271,7 +271,7 @@ if ($filters['tanggal_mulai'] && $filters['tanggal_selesai']) {
                                     <br><small class="text-muted"><?php echo $row['jenjang']; ?></small>
                                 <?php endif; ?>
                             </td>
-                            <td data-label="Deskripsi" class="text-muted small"><?php echo substr($row['deskripsi'], 0, 50) . '...'; ?></td>
+                            <td data-label="Deskripsi" class="text-muted small"><?php echo $row['deskripsi'] ? (strlen($row['deskripsi']) > 50 ? substr($row['deskripsi'], 0, 50) . '...' : $row['deskripsi']) : '-'; ?></td>
                             <td data-label="Bukti">
                                 <?php if($row['file_bukti']): ?>
                                     <?php 
@@ -467,6 +467,53 @@ function showPhotoModal(photoUrl, timestamp, gpsLat, gpsLng) {
     const modal = new bootstrap.Modal(document.getElementById('photoModal'));
     modal.show();
 }
+</script>
+
+<!-- Include jQuery (required for Select2) -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- Include Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+
+<!-- Include Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+// Initialize Select2 for filter dropdowns
+$(document).ready(function() {
+    // Initialize Select2 for pengawas dropdown
+    $('#filter_pengawas').select2({
+        theme: 'bootstrap-5',
+        placeholder: '-- Semua Pengawas --',
+        allowClear: true,
+        width: '100%',
+        language: {
+            noResults: function() {
+                return "Pengawas tidak ditemukan";
+            },
+            searching: function() {
+                return "Mencari...";
+            }
+        }
+    });
+    
+    // Initialize Select2 for madrasah dropdown
+    $('#filter_madrasah').select2({
+        theme: 'bootstrap-5',
+        placeholder: '-- Semua Madrasah --',
+        allowClear: true,
+        width: '100%',
+        language: {
+            noResults: function() {
+                return "Madrasah tidak ditemukan";
+            },
+            searching: function() {
+                return "Mencari...";
+            }
+        }
+    });
+});
 </script>
 
 <?php require_once __DIR__ . '/../../templates/footer.php'; ?>

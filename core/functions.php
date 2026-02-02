@@ -4,10 +4,25 @@
 // Fungsi untuk mendapatkan base URL agar link tidak broken
 // Fungsi untuk mendapatkan base URL agar link tidak broken
 function base_url($path = '') {
-    // Sesuaikan dengan folder project di htdocs/www
-    // Jika diakses via http://localhost/kipas
-    $base = "http://" . $_SERVER['HTTP_HOST'] . "/kipas";
-    return $base . '/' . ltrim($path, '/');
+    // 1. Cek User Config (Constant / Env)
+    if (defined('BASE_URL')) {
+        $base = BASE_URL;
+    } elseif (getenv('BASE_URL')) {
+        $base = getenv('BASE_URL');
+    } else {
+        // 2. Auto-detect
+        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+        $host = $_SERVER['HTTP_HOST'];
+
+        // Default logic
+        if ($host === 'localhost' || $host === '127.0.0.1') {
+            $base = "$protocol://$host/kipas"; // Preserves local workflow
+        } else {
+            $base = "$protocol://$host"; // Assumes root for production
+        }
+    }
+
+    return rtrim($base, '/') . '/' . ltrim($path, '/');
 }
 
 // Fungsi redirect
